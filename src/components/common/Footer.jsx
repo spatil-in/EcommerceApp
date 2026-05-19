@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function Footer() {
+export default function Footer() {
     return (
-        <footer className="bg-neutral-primary-soft">
+        <footer className="bg-neutral-primary-soft w-full">
             <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
                 <div className="md:flex md:justify-between">
                     <div className="mb-6 md:mb-0">
