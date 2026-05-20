@@ -10,9 +10,6 @@ export default function Header() {
     const cartItems = useSelector((state) => {
        return state.cartStore.cartItems
     });
-
-
-
     return (
         <nav className="bg-neutral-primary fixed w-full z-20 top-0 start-0 border-b border-default bg-white opacity-90">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
