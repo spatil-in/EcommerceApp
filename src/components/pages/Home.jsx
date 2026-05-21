@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { addToCart, deleteCart } from "../../Redux/cartSlice";
 import { ToastContainer, toast } from 'react-toastify';
 import { useSelector } from "react-redux";
+import { addToFav ,deleteFav } from "../../Redux/favProducts";
 
 export default function Home(){
 
@@ -34,7 +35,6 @@ export default function Home(){
             setData([...formatData2, ...formatData1]); 
         });
     }, [])
-
     return(
         <section className="py-5">
          <h1 className="text-center text-3xl font-bold ">Our Products</h1>
@@ -55,7 +55,8 @@ function ProductCard({product}) {
     let dispatch = useDispatch()
 
     let cart = useSelector((state) => state.cartStore.cartItems)
-    
+    let favCart = useSelector((state) => state.favStore.favItems)
+
     const addToCartItem = () => {
         let cartObj = {
             id,
@@ -74,6 +75,25 @@ function ProductCard({product}) {
     const removeCart = () => {
         dispatch(deleteCart({uniqeID}))
     }
+
+    const addToFavItem = () => {
+        let favObj = {
+            id,
+            title,
+            price,
+            thumbnail,
+            qty:1,
+            uniqeID
+        }
+        dispatch(addToFav({favObj}));
+    }
+    
+    const checkfavItem = favCart.find((obj) => obj.uniqeID == uniqeID)
+
+    const removeFromFav = () => {
+        dispatch(deleteFav({uniqeID}));
+    }
+
     return (
         <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm ">
             <div className="h-56 w-full">
@@ -144,7 +164,33 @@ function ProductCard({product}) {
                                 }}
                             />
                         </div>
+                        {
+                            checkfavItem ? 
+                            <button
+                            onClick={removeFromFav}
+                            type="button"
+                            data-tooltip-target="tooltip-add-to-favorites"
+                            className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 "
+                        >
+                            <span className="sr-only"> Add to Favorites </span>
+                            <svg
+                                className="h-5 w-5 text-red-500"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="red"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke="currentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M12 6C6.5 1 1 8 5.8 13l6.2 7 6.2-7C23 8 17.5 1 12 6Z"
+                                />
+                            </svg>
+                        </button> :
                         <button
+                            onClick={addToFavItem}
                             type="button"
                             data-tooltip-target="tooltip-add-to-favorites"
                             className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 "
@@ -166,7 +212,9 @@ function ProductCard({product}) {
                                 />
                             </svg>
                         </button>
-                        <div
+                        }
+                        
+                        {/* <div
                             id="tooltip-add-to-favorites"
                             role="tooltip"
                             className="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 "
@@ -188,7 +236,7 @@ function ProductCard({product}) {
                                     transform: "translate3d(61px, 0px, 0px)"
                                 }}
                             />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <Link

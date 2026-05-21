@@ -2,6 +2,7 @@ import React, {useState } from "react";
 import { useDispatch, useSelector} from "react-redux";
 import { Link } from "react-router-dom";
 import { changeqty, deleteCart } from "../../Redux/cartSlice";
+import { addToFav , deleteFav } from "../../Redux/favProducts";
 
 export default function Cart() {
     const [discountAmount, setDiscountAmount] = useState(0);
@@ -174,6 +175,25 @@ function CartProduct({product}) {
         }
         dispatch(changeqty({uniqeID ,finalQty}))
     }
+
+    const addToFavItem = () => {
+            let favObj = {
+                id,
+                title,
+                price,
+                thumbnail,
+                qty:1,
+                uniqeID
+            }
+            dispatch(addToFav({favObj}));
+        }
+     let favCart = useSelector((state) => state.favStore.favItems)
+     const checkfavItem = favCart.find((obj) => obj.uniqeID == uniqeID)
+
+     const removeFromFav = () => {
+             dispatch(deleteFav({uniqeID}));
+         }
+
     return ( 
         <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm md:p-6">
             <div className="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
@@ -260,7 +280,34 @@ function CartProduct({product}) {
                         {title} | {price}
                     </Link>
                     <div className="flex items-center gap-4 mt-4">
+                        {
+                            checkfavItem ?
+                            <button
+                            onClick={removeFromFav}
+                            type="button"
+                            className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline"
+                        >
+                            <svg
+                                className="me-1.5 h-5 w-5 text-red-500"
+                                aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width={24}
+                                height={24}
+                                fill="red"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke="currentColor"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"
+                                />
+                            </svg>
+                            Remove Favorite
+                        </button> :
                         <button
+                            onClick={addToFavItem}
                             type="button"
                             className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 hover:underline"
                         >
@@ -283,6 +330,8 @@ function CartProduct({product}) {
                             </svg>
                             Add to Favorites
                         </button>
+                        }
+                        
                         <button
                             onClick={removeFromCart}
                             type="button"

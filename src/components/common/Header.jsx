@@ -4,12 +4,9 @@ import { Link } from "react-router-dom";
 
 export default function Header() {
     
-    const myData = useSelector((state) => {
-       return state.counterStore.count
-    });
-    const cartItems = useSelector((state) => {
-       return state.cartStore.cartItems
-    });
+    const myData = useSelector((state) => state.counterStore.count );
+    const cartItems = useSelector((state) => state.cartStore.cartItems);
+    let favCart = useSelector((state) => state.favStore.favItems)
     return (
         <nav className="bg-neutral-primary fixed w-full z-20 top-0 start-0 border-b border-default bg-white opacity-90">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -75,7 +72,7 @@ export default function Header() {
                                 to={'/favcart'}
                                 className="block py-2 px-3 text-heading rounded hover:bg-neutral-tertiary md:hover:bg-transparent md:border-0 md:hover:text-fg-brand md:p-0 md:dark:hover:bg-transparent"
                             >
-                                Fav Items
+                                Fav Items ({favCart.length})
                             </Link>
                         </li>
                     </ul>

@@ -1,19 +1,23 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { deleteFav } from "../../Redux/favProducts";
 
 
 export default function FavCart({ products }) {
-    const data = useSelector((state) => state.cartStore.cartItems)
+    const data = useSelector((state) => state.favStore.favItems)
 
     return (
         <section className="py-5">
             <h1 className="text-center text-3xl font-bold ">Favorite Products</h1>
             <div className="max-w-[1320px] grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 mx-auto gap-5 mt-5 px-7">
-                {data.map((product) => (
-                    <FavProducts key={product.uniqeID} product={product} />
-                ))}
-            </div>
+                { data.length > 0 ? 
+                        data.map((product, index) => (
+                            <FavProducts product={product} key={index}/> 
+                        ))
+                        : <p className="text-center text-gray-500 mt-5">No items in the favorite cart</p> 
+                        }
+           </div>
         </section>
     )
 }
@@ -24,8 +28,8 @@ function FavProducts({ product }) {
 
     const dispatch = useDispatch()
 
-    const removeFromCart = () => {
-        dispatch(deleteCart({ uniqeID }))
+    const removeFromFav = () => {
+        dispatch(deleteFav({ uniqeID }))
     }
 
     return (
@@ -105,10 +109,10 @@ function FavProducts({ product }) {
                         >
                             <span className="sr-only"> Add to Favorites </span>
                             <svg
-                                className="h-5 w-5"
+                                className="h-5 w-5 text-red-500" 
                                 aria-hidden="true"
                                 xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
+                                fill="red"
                                 viewBox="0 0 24 24"
                             >
                                 <path
@@ -120,10 +124,10 @@ function FavProducts({ product }) {
                                 />
                             </svg>
                         </button>
-                        <div
+                        {/* <div
                             id="tooltip-add-to-favorites"
                             role="tooltip"
-                            className="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 "
+                            className="tooltip absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 "
                             data-popper-placement="top"
                             style={{
                                 position: "absolute",
@@ -142,7 +146,7 @@ function FavProducts({ product }) {
                                     transform: "translate3d(61px, 0px, 0px)"
                                 }}
                             />
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <Link
@@ -249,10 +253,8 @@ function FavProducts({ product }) {
                     <p className="text-2xl font-extrabold leading-tight text-gray-900 ">
                         $ {price}
                     </p>
-                    {
-                        checkcartItem ?
                             <button
-                                onClick={removeCart}
+                                onClick={removeFromFav}
                                 type="button"
                                 className="inline-flex items-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white bg-red-500 border border-primary-700 hover:bg-primary-800 focus:outline-none focus:ring-4  focus:ring-primary-300  "
                             >
@@ -273,33 +275,8 @@ function FavProducts({ product }) {
                                         d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6"
                                     />
                                 </svg>
-                                Remove Cart
-                            </button> :
-                            <button
-                                onClick={addToCartItem}
-                                type="button"
-                                className="inline-flex items-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-black border border-primary-700 hover:bg-primary-800 focus:outline-none focus:ring-4  focus:ring-primary-300  "
-                            >
-                                <svg
-                                    className="-ms-2 me-2 h-5 w-5"
-                                    aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width={24}
-                                    height={24}
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke="currentColor"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M4 4h1.5L8 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm.75-3H7.5M11 7H6.312M17 4v6m-3-3h6"
-                                    />
-                                </svg>
-                                Add to cart
-                            </button>
-                    }
+                                Remove 
+                            </button> 
                 </div>
             </div>
         </div>
